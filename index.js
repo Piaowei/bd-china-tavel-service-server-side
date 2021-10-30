@@ -83,11 +83,6 @@ async function run() {
 			res.json(result);
 		});
 
-
-
-
-
-
 		//DELETE API
 
 		app.delete('/services/:id', async (req, res) => {
@@ -98,6 +93,7 @@ async function run() {
 
 		})
 
+
 		//DELETE API for order items
 
 		app.delete('/orderItems/:id', async (req, res) => {
@@ -107,6 +103,25 @@ async function run() {
 			const result = await serviceOrderItems.deleteOne(query);
 			res.json(result);
 
+		})
+
+		//UPDATE API
+
+		app.put('/orderItems/:id', async (req, res) => {
+			const id = req.params.id;
+			const updatedUser = req.body;
+			const filter = { _id: ObjectId(id) };
+			const options = { upsert: true };
+			const updateDoc = {
+				$set: {
+					productStatus: "Approved",
+				},
+			};
+			const result = await serviceOrderItems.updateOne(filter, updateDoc, options);
+			// console.log('req er params hosse:', req)
+			console.log('update user', id)
+			res.json(result);
+			// console.log("see json data", res.json(result));
 		})
 
 
