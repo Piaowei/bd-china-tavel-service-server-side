@@ -69,22 +69,18 @@ async function run() {
 			const service = req.body;
 			console.log("hit the post api", service);
 			const result = await serviceCollection.insertOne(service);
-			// console.log(result);
-			// res.send('post hitted')
 			res.json(result);
 		});
+
 		// POST API for order items
 		app.post('/orderItems', async (req, res) => {
 			const orderItems = req.body;
 			console.log("hit the post api of order items", orderItems);
 			const result = await serviceOrderItems.insertOne(orderItems);
-			// console.log(result);
-			// res.send('post hitted')
 			res.json(result);
 		});
 
 		//DELETE API
-
 		app.delete('/services/:id', async (req, res) => {
 			const id = req.params.id;
 			const query = { _id: ObjectId(id) };
@@ -95,7 +91,6 @@ async function run() {
 
 
 		//DELETE API for order items
-
 		app.delete('/orderItems/:id', async (req, res) => {
 			const id = req.params.id;
 			console.log("delete hitted", id)
@@ -106,7 +101,6 @@ async function run() {
 		})
 
 		//UPDATE API
-
 		app.put('/orderItems/:id', async (req, res) => {
 			const id = req.params.id;
 			const updatedUser = req.body;
@@ -118,10 +112,8 @@ async function run() {
 				},
 			};
 			const result = await serviceOrderItems.updateOne(filter, updateDoc, options);
-			// console.log('req er params hosse:', req)
 			console.log('update user', id)
 			res.json(result);
-			// console.log("see json data", res.json(result));
 		})
 
 
@@ -134,12 +126,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get('/', (req, res) => {
-	// console.log(res);
 	res.json('running Genius Server')
-});
-app.get('/hello', (req, res) => {
-	// console.log(res);
-	res.send('bye bye Genius Server')
 });
 
 app.listen(port, () => {
