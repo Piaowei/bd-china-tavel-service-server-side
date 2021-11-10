@@ -32,6 +32,38 @@ async function run() {
 		/*---------------------------------------
 					   GET POST STARTED
 		 -------------------------------------- */
+
+
+
+		// PURE UPDATE FOR ADMIN
+		app.put('/users/admin', async (req, res) => {
+			const user = req.body;
+			const filter = { email: user.email };
+			const updateDoc = { $set: { role: 'admin' } };
+			const result = await usersCollection.updateOne(filter, updateDoc);
+			res.json(result);
+
+
+
+
+		})
+
+		// CHECK WHETHER ADMIN
+		app.get('/users/:email', async (req, res) => {
+			const email = req.params.email;
+			// console.log("query", req.query);
+			// console.log("params", req.params);
+			const query = { email: email }
+			const user = await usersCollection.findOne(query);
+
+			let isAdmin = false;
+			if (user?.role === "admin") {
+				isAdmin = true;
+			}
+			res.json({ admin: isAdmin })
+		});
+
+
 		// POST API FOR USERS
 		app.post('/users', async (req, res) => {
 			const user = req.body;
@@ -65,6 +97,24 @@ async function run() {
 			console.log("order items", orderItems);
 			res.send(orderItems);
 		})
+
+		// GET API for ordered data FOR SPECIFIC USER
+		// app.get('/orderItems/:email', async (req, res) => {
+		// 	const cursor = serviceOrderItems.find();
+		// 	const orderItems = await cursor.toArray();
+		// 	console.log("order items", orderItems);
+		// 	res.send(orderItems);
+		// })
+		// GET API 
+		app.get('/orderItems/:email', async (req, res) => {
+			const email = req.params.email;
+			console.log("query is", req.query);
+			console.log("params is", req.query);
+			const query = { email: email }
+			const cursor = serviceOrderItems.find(query);
+			const appointments = await cursor.toArray();
+			res.json(appointments);
+		});
 
 
 
