@@ -25,7 +25,31 @@ async function run() {
 		const database = client.db("chinaTravel");
 		const serviceCollection = database.collection("services");
 		const serviceOrderItems = database.collection("orderItems");
-		const serviceAdvertise = database.collection("advertise");
+		// const serviceAdvertise = database.collection("advertise");
+		const usersCollection = database.collection('users');
+
+
+		/*---------------------------------------
+					   GET POST STARTED
+		 -------------------------------------- */
+		// POST API FOR USERS
+		app.post('/users', async (req, res) => {
+			const user = req.body;
+			const result = await usersCollection.insertOne(user);
+			console.log(user);
+			res.json(result);
+		})
+		// UPSERT
+		app.put('/users', async (req, res) => {
+			const user = req.body;
+			const filter = { email: user.email };
+			const options = { upsert: true };
+			const updateDoc = { $set: user };
+			const result = await usersCollection.updateOne(filter, updateDoc, options);
+			res.json(result);
+
+		});
+
 
 		// GET API for set data
 		app.get('/services', async (req, res) => {
